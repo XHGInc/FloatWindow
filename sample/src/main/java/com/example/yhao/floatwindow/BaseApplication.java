@@ -1,10 +1,12 @@
 package com.example.yhao.floatwindow;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -29,12 +31,16 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        FrameLayout layout = new FrameLayout(this);
+
         ImageView imageView = new ImageView(getApplicationContext());
         imageView.setImageResource(R.drawable.icon);
 
+        layout.addView(imageView);
+
         FloatWindow
                 .with(getApplicationContext())
-                .setView(imageView)
+                .setView(layout)
                 .setWidth(Screen.width, 0.2f) //设置悬浮控件宽高
                 .setHeight(Screen.width, 0.2f)
                 .setX(Screen.width, 0.8f)

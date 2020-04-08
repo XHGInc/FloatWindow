@@ -214,6 +214,12 @@ public class FloatWindow {
             if (mView == null) {
                 mView = Util.inflate(mApplicationContext, mLayoutId);
             }
+
+            TouchProxyLayout layout = new TouchProxyLayout(mApplicationContext);
+            layout.addView(mView);
+
+            mView = layout;
+
             IFloatWindow floatWindowImpl = new IFloatWindowImpl(this);
             mFloatWindowMap.put(mTag, floatWindowImpl);
 
