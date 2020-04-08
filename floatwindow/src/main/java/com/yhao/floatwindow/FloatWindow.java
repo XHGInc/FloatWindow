@@ -2,13 +2,14 @@ package com.yhao.floatwindow;
 
 import android.animation.TimeInterpolator;
 import android.content.Context;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,12 +21,13 @@ import java.util.Map;
 
 public class FloatWindow {
 
+    private static final String mDefaultTag = "default_float_window_tag";
+    private static Map<String, IFloatWindow> mFloatWindowMap;
+    private static B mBuilder = null;
+
     private FloatWindow() {
 
     }
-
-    private static final String mDefaultTag = "default_float_window_tag";
-    private static Map<String, IFloatWindow> mFloatWindowMap;
 
     public static IFloatWindow get() {
         return get(mDefaultTag);
@@ -34,8 +36,6 @@ public class FloatWindow {
     public static IFloatWindow get(@NonNull String tag) {
         return mFloatWindowMap == null ? null : mFloatWindowMap.get(tag);
     }
-
-    private static B mBuilder = null;
 
     @MainThread
     public static B with(@NonNull Context applicationContext) {
@@ -55,25 +55,25 @@ public class FloatWindow {
     }
 
     public static class B {
-        Context mApplicationContext;
-        View mView;
-        private int mLayoutId;
-        int mWidth = ViewGroup.LayoutParams.WRAP_CONTENT;
-        int mHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
-        int gravity = Gravity.TOP | Gravity.START;
-        int xOffset;
-        int yOffset;
-        boolean mShow = true;
-        Class[] mActivities;
-        int mMoveType = MoveType.slide;
-        int mSlideLeftMargin;
-        int mSlideRightMargin;
-        long mDuration = 300;
-        TimeInterpolator mInterpolator;
-        private String mTag = mDefaultTag;
-        boolean mDesktopShow;
-        PermissionListener mPermissionListener;
-        ViewStateListener mViewStateListener;
+        public Context mApplicationContext;
+        public View mView;
+        public int mLayoutId;
+        public int mWidth = ViewGroup.LayoutParams.WRAP_CONTENT;
+        public int mHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
+        public int gravity = Gravity.TOP | Gravity.START;
+        public int xOffset;
+        public int yOffset;
+        public boolean mShow = true;
+        public Class[] mActivities;
+        public int mMoveType = MoveType.slide;
+        public int mSlideLeftMargin;
+        public int mSlideRightMargin;
+        public long mDuration = 300;
+        public TimeInterpolator mInterpolator;
+        public String mTag = mDefaultTag;
+        public boolean mDesktopShow;
+        public PermissionListener mPermissionListener;
+        public ViewStateListener mViewStateListener;
 
         private B() {
 
@@ -201,7 +201,7 @@ public class FloatWindow {
             return this;
         }
 
-        public void build() {
+        public IFloatWindow build() {
             if (mFloatWindowMap == null) {
                 mFloatWindowMap = new HashMap<>();
             }
@@ -216,7 +216,8 @@ public class FloatWindow {
             }
             IFloatWindow floatWindowImpl = new IFloatWindowImpl(this);
             mFloatWindowMap.put(mTag, floatWindowImpl);
-        }
 
+            return floatWindowImpl;
+        }
     }
 }
